@@ -97,6 +97,7 @@
             this.ClientSize = new System.Drawing.Size(464, 450);
             this.Controls.Add(this.panelContainer);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Activated += new System.EventHandler(this.Form1_Activated);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
