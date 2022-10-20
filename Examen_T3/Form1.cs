@@ -15,6 +15,8 @@ namespace Examen_T3
     public partial class Form1 : Form
     {
         /////////////////////////////////////////////////////////////////////////////////////////////
+        // -> Formulario(el Form1) Redondeado con Bordes / (Todo lo de Abajo)
+
 
         // Campos
         private int borderRadius = 30;
