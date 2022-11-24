@@ -14,14 +14,171 @@ namespace Examen_T3
 {
     public partial class Form1 : Form
     {
-        /////////////////////////////////////////////////////////////////////////////////////////////
+        // Declararando una lista (Modulo 9)
+        List<Juego> LstJuegos = new List<Juego>();
+
+        int p_indice = 0, p_punts = 0;
+
+
+        // Módulo 10: Manejo de archivos
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // concatenando una galeria de imagenes
+            pictureBox2.ImageLocation = "C:/Users/PC/Desktop/Final-2/img/" + comboBox1.Text + ".png";
+
+        }
+
+
+        // Combobox -> cmbPartida
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            txtPuntos.Enabled = false;
+            // Cargar el Combo
+            cmbPartida.Items.Add("Seleccione: ");
+            cmbPartida.Items.Add("Victoria");
+            cmbPartida.Items.Add("Derrota");
+            cmbPartida.SelectedIndex = 0;
+        }
+
+        // Puntos -> Mostrar en el dataGridView1
+        private void cmbPartida_SelectedIndexChanged(object sender, EventArgs e)
+        {
+                    
+            p_indice = cmbPartida.SelectedIndex;
+
+            switch (p_indice)
+            {
+                case 1:
+                    p_punts = 100;
+                    break;
+                case 2:
+                    p_punts = -20;
+                    break;
+
+            }
+            txtPuntos.Text = p_punts.ToString();
+        }
+
+        // Sumar valores de una columna de un dataGridView1 y mostrar resultado en un (Label) C#
+        private void button1_Click(object sender, EventArgs e)
+        {
+            double p_total = 0;
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                                                     // Columna Puntos
+                p_total += Convert.ToDouble(row.Cells["Puntos"].Value);
+            }
+            IBIpuntosObtenidos.Text = p_total.ToString(); // Visualize el RESULTADO en Label
+        }
+
+
+        // Boton REGISTRAR
+        private void btnRegistrar_Click(object sender, EventArgs e)
+        {
+
+            Juego oJuego = new Juego();
+
+            oJuego.usuario = txtUsuario.Text;
+            oJuego.juego = comboBox1.Text;
+            oJuego.dia = cmbDia.Text;
+            oJuego.partida = cmbPartida.Text;
+            oJuego.puntos = txtPuntos.Text;
+
+            LstJuegos.Add(oJuego);
+            // (Modulo_8) Exepciones
+            MessageBox.Show("Se registro con Éxito ✔️");    // -> Mensaje en pantalla
+
+        }
+
+        // Boton Mostrar
+        private void btnMostrar_Click(object sender, EventArgs e)
+        {
+            MostrarLista();
+        }
+        public void MostrarLista()
+        {
+            dataGridView1.Rows.Clear();
+            foreach (Juego item in LstJuegos)
+            {
+                // MessageBox.Show(item.usuario);
+                dataGridView1.Rows.Add(item.getData());
+            }
+        }
+
+
+        // Boton ELIMIAR
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult rppta = MessageBox.Show("¿Desea eliminar?",
+                    "Eliminacion", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (rppta == DialogResult.Yes)
+                {
+                    dataGridView1.Rows.Remove(dataGridView1.CurrentRow);
+                }
+            }
+            catch { }
+        }
+
+
+        // Todo de Abajo -> codigo Exportar Excel
+        private void btnExportar_Click(object sender, EventArgs e)
+        {
+            exportaraexcel(dataGridView1);
+        }
+        public void exportaraexcel(DataGridView tabla)
+        {
+
+            Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+
+            excel.Application.Workbooks.Add(true);
+
+            int IndiceColumna = 0;
+
+            foreach (DataGridViewColumn col in tabla.Columns)
+            {
+
+                IndiceColumna++;
+
+                excel.Cells[1, IndiceColumna] = col.Name;
+
+            }
+
+            int IndeceFila = 0;
+
+            foreach (DataGridViewRow row in tabla.Rows)
+            {
+
+                IndeceFila++;
+
+                IndiceColumna = 0;
+
+                foreach (DataGridViewColumn col in tabla.Columns)
+                {
+
+                    IndiceColumna++;
+
+                    excel.Cells[IndeceFila + 1, IndiceColumna] = row.Cells[col.Name].Value;
+
+                }
+
+            }
+
+            excel.Visible = true;
+        }
+
+
+        /////////////////////////////////////////////////////////////////////
         // -> Formulario(el Form1) Redondeado con Bordes / (Todo lo de Abajo)
 
 
         // Campos
         private int borderRadius = 30;
         private int borderSize = 2;
-        private Color borderColor = Color.SteelBlue; // cambiar de color_1.1
+        private Color borderColor = Color.Black; // cambiar de color_1.1 (del Form)
 
 
         // Constructor
@@ -242,6 +399,9 @@ namespace Examen_T3
         {
             this.WindowState = FormWindowState.Minimized;
         }
+
+
+
 
         /////////////////////////////////////////////////////////////////////////////////////////////
     }
